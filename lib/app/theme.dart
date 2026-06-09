@@ -5,11 +5,11 @@ class AppTheme {
     useMaterial3: true,
     brightness: Brightness.light,
 
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.blue,
-        brightness: Brightness.light,
-      )
-    );
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: Brightness.light,
+    ),
+  );
 
   static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
