@@ -9,9 +9,15 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/',
 
   routes: [
-    GoRoute(path: '/', builder: (context, state) => const HomePage()),
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const HomePage()
+    ),
 
-    GoRoute(path: '/sorting', builder: (context, state) => const SortingPage()),
+    GoRoute(
+      path: '/sorting',
+      builder: (context, state) => const SortingPage()
+    ),
 
     GoRoute(
       path: '/pathfinding',
