@@ -8,7 +8,8 @@ void main() {
   runApp(
     ProviderScope(
       child: AlgorithmVisualizerApp(
-        router: appRouter)
+        router: appRouter
+      )
     )
   );
 }
