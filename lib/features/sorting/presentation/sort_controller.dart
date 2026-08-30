@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:state_notifier/state_notifier.dart';
 
 import '../domain/sort_algo.dart';
 import '../domain/sort_event.dart';
