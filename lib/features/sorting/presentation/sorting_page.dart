@@ -17,7 +17,7 @@ class SortingPage extends ConsumerWidget {
       Future.microtask(() {
         ref
             .read(sortControllerProvider.notifier)
-            .generateArray(30);
+            .generateArray(20);
       });
     }
 
@@ -47,6 +47,100 @@ class SortingPage extends ConsumerWidget {
                 ),
                 size: Size.infinite,
               ),
+            ),
+          ),
+
+          // --------------------------------------------------
+          // Array values
+          // --------------------------------------------------
+
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Array',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+
+                const SizedBox(height: 8),
+
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                      state.array.length,
+                      (index) {
+                        final isActive =
+                            index == state.activeIndexA ||
+                                index == state.activeIndexB;
+
+                        return Column(
+                          children: [
+                            // Index
+                            SizedBox(
+                              width: 48,
+                              child: Text(
+                                '$index',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      fontWeight:
+                                          FontWeight.bold,
+                                    ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 4),
+
+                            // Value cell
+                            Container(
+                              width: 48,
+                              height: 48,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: isActive
+                                    ? Colors.red
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .surface,
+                                border: Border.all(
+                                  color: isActive
+                                      ? Colors.red
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .outline,
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: Text(
+                                '${state.array[index]}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: isActive
+                                      ? Colors.white
+                                      : null,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -134,7 +228,7 @@ class SortingPage extends ConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        controller.generateArray(30);
+                        controller.generateArray(20);
                       },
                       child: const Text('New Array'),
                     ),
