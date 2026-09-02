@@ -14,6 +14,7 @@ class SortState {
   final SortStatus status;
   final int activeIndexA;
   final int activeIndexB;
+  final List<int> sortedIndices;
   final String algorithmName;
   final double speed;
 
@@ -24,6 +25,7 @@ class SortState {
     required this.status,
     required this.activeIndexA,
     required this.activeIndexB,
+    required this.sortedIndices,
     required this.algorithmName,
     required this.speed,
   });
@@ -36,6 +38,7 @@ class SortState {
       status: SortStatus.idle,
       activeIndexA: -1,
       activeIndexB: -1,
+      sortedIndices: [],
       algorithmName: 'Bubble Sort',
       speed: 200,
     );
@@ -48,6 +51,7 @@ class SortState {
     SortStatus? status,
     int? activeIndexA,
     int? activeIndexB,
+    List<int>? sortedIndices,
     String? algorithmName,
     double? speed,
   }) {
@@ -58,6 +62,7 @@ class SortState {
       status: status ?? this.status,
       activeIndexA: activeIndexA ?? this.activeIndexA,
       activeIndexB: activeIndexB ?? this.activeIndexB,
+      sortedIndices: sortedIndices ?? this.sortedIndices,
       algorithmName: algorithmName ?? this.algorithmName,
       speed: speed ?? this.speed,
     );

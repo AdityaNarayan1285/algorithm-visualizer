@@ -43,6 +43,7 @@ class SortingPage extends ConsumerWidget {
                   array: state.array,
                   activeIndexA: state.activeIndexA,
                   activeIndexB: state.activeIndexB,
+                  sortedIndices: state.sortedIndices,
                   maxValue: 100,
                 ),
                 size: Size.infinite,
@@ -84,6 +85,9 @@ class SortingPage extends ConsumerWidget {
                             index == state.activeIndexA ||
                                 index == state.activeIndexB;
 
+                        final isSorted =
+                            state.sortedIndices.contains(index);
+
                         return Column(
                           children: [
                             // Index
@@ -112,15 +116,19 @@ class SortingPage extends ConsumerWidget {
                               decoration: BoxDecoration(
                                 color: isActive
                                     ? Colors.red
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .surface,
+                                    : isSorted
+                                        ? Colors.green
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .surface,
                                 border: Border.all(
                                   color: isActive
                                       ? Colors.red
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .outline,
+                                      : isSorted
+                                          ? Colors.green
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .outline,
                                   width: 1.5,
                                 ),
                               ),
@@ -128,7 +136,7 @@ class SortingPage extends ConsumerWidget {
                                 '${state.array[index]}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: isActive
+                                  color: isActive || isSorted
                                       ? Colors.white
                                       : null,
                                 ),

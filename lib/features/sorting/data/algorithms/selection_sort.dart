@@ -47,6 +47,28 @@ class SelectionSort implements SortAlgorithm {
           ),
         );
       }
+
+      // Position i is now finalized.
+      events.add(
+        SortEvent(
+          type: SortEventType.mark,
+          indexA: i,
+          indexB: -1,
+          arraySnapshot: List<int>.from(array),
+        ),
+      );
+    }
+
+    // The final remaining position is also finalized.
+    if (array.isNotEmpty) {
+      events.add(
+        SortEvent(
+          type: SortEventType.mark,
+          indexA: array.length - 1,
+          indexB: -1,
+          arraySnapshot: List<int>.from(array),
+        ),
+      );
     }
 
     // Record completion.

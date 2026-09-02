@@ -4,12 +4,14 @@ class SortBarsPainter extends CustomPainter {
   final List<int> array;
   final int activeIndexA;
   final int activeIndexB;
+  final List<int> sortedIndices;
   final int maxValue;
 
   const SortBarsPainter({
     required this.array,
     required this.activeIndexA,
     required this.activeIndexB,
+    required this.sortedIndices,
     required this.maxValue,
   });
 
@@ -26,9 +28,16 @@ class SortBarsPainter extends CustomPainter {
       final barHeight =
           (array[i] / maxValue) * size.height;
 
-      // Highlight active bars.
-      if (i == activeIndexA || i == activeIndexB) {
+      final isActive =
+          i == activeIndexA || i == activeIndexB;
+
+      final isSorted = sortedIndices.contains(i);
+
+      // Active indices take priority over sorted indices.
+      if (isActive) {
         paint.color = Colors.red;
+      } else if (isSorted) {
+        paint.color = Colors.green;
       } else {
         paint.color = Colors.blue;
       }

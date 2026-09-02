@@ -10,7 +10,7 @@ class BubbleSort implements SortAlgorithm {
     // Work on a copy so that the original array isn't modified.
     final array = List<int>.from(input);
 
-    // Stores every comparison and swap.
+    // Stores every comparison, swap, mark, and completion event.
     final events = <SortEvent>[];
 
     for (int i = 0; i < array.length - 1; i++) {
@@ -42,7 +42,41 @@ class BubbleSort implements SortAlgorithm {
           );
         }
       }
+
+      // The largest remaining element has reached its final position.
+      final sortedIndex = array.length - i - 1;
+
+      events.add(
+        SortEvent(
+          type: SortEventType.mark,
+          indexA: sortedIndex,
+          indexB: -1,
+          arraySnapshot: List<int>.from(array),
+        ),
+      );
     }
+
+    // The first element is also finalized.
+    if (array.isNotEmpty) {
+      events.add(
+        SortEvent(
+          type: SortEventType.mark,
+          indexA: 0,
+          indexB: -1,
+          arraySnapshot: List<int>.from(array),
+        ),
+      );
+    }
+
+    // Record completion.
+    events.add(
+      SortEvent(
+        type: SortEventType.done,
+        indexA: -1,
+        indexB: -1,
+        arraySnapshot: List<int>.from(array),
+      ),
+    );
 
     return events;
   }

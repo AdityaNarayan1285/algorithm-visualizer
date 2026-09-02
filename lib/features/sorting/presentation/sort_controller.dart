@@ -52,7 +52,41 @@ class SortController extends StateNotifier<SortState> {
       status: SortStatus.idle,
       activeIndexA: -1,
       activeIndexB: -1,
+      sortedIndices: [],
     );
+  }
+
+  // ----------------------------------------------------------
+  // Calculate sorted indices from visualization events
+  // ----------------------------------------------------------
+
+  List<int> _getSortedIndicesAtStep(
+    List<SortEvent> events,
+    int step,
+  ) {
+    final sortedIndices = <int>{};
+
+    for (int i = 0; i <= step && i < events.length; i++) {
+      final event = events[i];
+
+      if (event.type == SortEventType.mark) {
+        // mark uses indexA as the finalized position.
+        sortedIndices.add(event.indexA);
+      } else if (event.type == SortEventType.unmark) {
+        // unmark removes the finalized position.
+        sortedIndices.remove(event.indexA);
+      } else if (event.type == SortEventType.done) {
+        // Once the algorithm is complete, every position is sorted.
+        for (int index = 0; index < event.arraySnapshot.length; index++) {
+          sortedIndices.add(index);
+        }
+      }
+    }
+
+    final result = sortedIndices.toList();
+    result.sort();
+
+    return result;
   }
 
   // ----------------------------------------------------------
@@ -72,6 +106,7 @@ class SortController extends StateNotifier<SortState> {
       state = state.copyWith(
         events: events,
         currentStep: 0,
+        sortedIndices: _getSortedIndicesAtStep(events, 0),
       );
     }
 
@@ -118,6 +153,10 @@ class SortController extends StateNotifier<SortState> {
         array: lastEvent.arraySnapshot,
         activeIndexA: lastEvent.indexA,
         activeIndexB: lastEvent.indexB,
+        sortedIndices: _getSortedIndicesAtStep(
+          state.events,
+          state.events.length - 1,
+        ),
       );
 
       return;
@@ -131,6 +170,10 @@ class SortController extends StateNotifier<SortState> {
       array: event.arraySnapshot,
       activeIndexA: event.indexA,
       activeIndexB: event.indexB,
+      sortedIndices: _getSortedIndicesAtStep(
+        state.events,
+        nextStep,
+      ),
     );
 
     if (event.type == SortEventType.done) {
@@ -171,6 +214,7 @@ class SortController extends StateNotifier<SortState> {
       state = state.copyWith(
         events: events,
         currentStep: 0,
+        sortedIndices: _getSortedIndicesAtStep(events, 0),
       );
     }
 
@@ -186,6 +230,10 @@ class SortController extends StateNotifier<SortState> {
       array: event.arraySnapshot,
       activeIndexA: event.indexA,
       activeIndexB: event.indexB,
+      sortedIndices: _getSortedIndicesAtStep(
+        state.events,
+        nextStep,
+      ),
       status: event.type == SortEventType.done
           ? SortStatus.completed
           : SortStatus.paused,
@@ -215,6 +263,10 @@ class SortController extends StateNotifier<SortState> {
       array: event.arraySnapshot,
       activeIndexA: event.indexA,
       activeIndexB: event.indexB,
+      sortedIndices: _getSortedIndicesAtStep(
+        state.events,
+        previousStep,
+      ),
       status: SortStatus.paused,
     );
   }
@@ -232,6 +284,7 @@ class SortController extends StateNotifier<SortState> {
       events: [],
       activeIndexA: -1,
       activeIndexB: -1,
+      sortedIndices: [],
     );
   }
 
