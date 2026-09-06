@@ -237,8 +237,10 @@ class SortingPage extends ConsumerWidget {
                         child: Slider(
                           min: 10,
                           max: 500,
-                          value: state.speed.clamp(10, 500),
-                          onChanged: controller.setSpeed,
+                          value: 510 - state.speed.clamp(10, 500),
+                          onChanged: (value) {
+                            controller.setSpeed(510 - value);
+                          }
                         ),
                       ),
                     ],
