@@ -1,6 +1,8 @@
 enum SortEventType {
   comparison,
   swap,
+  shift,
+  insert,
   mark,
   unmark,
   done,
