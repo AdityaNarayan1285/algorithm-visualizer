@@ -53,6 +53,7 @@ class SortController extends StateNotifier<SortState> {
       activeIndexA: -1,
       activeIndexB: -1,
       sortedIndices: [],
+      currentEventType: null,
     );
   }
 
@@ -170,6 +171,7 @@ class SortController extends StateNotifier<SortState> {
       array: event.arraySnapshot,
       activeIndexA: event.indexA,
       activeIndexB: event.indexB,
+      currentEventType: event.type,
       sortedIndices: _getSortedIndicesAtStep(
         state.events,
         nextStep,
@@ -230,6 +232,7 @@ class SortController extends StateNotifier<SortState> {
       array: event.arraySnapshot,
       activeIndexA: event.indexA,
       activeIndexB: event.indexB,
+      currentEventType: event.type,
       sortedIndices: _getSortedIndicesAtStep(
         state.events,
         nextStep,
@@ -263,6 +266,7 @@ class SortController extends StateNotifier<SortState> {
       array: event.arraySnapshot,
       activeIndexA: event.indexA,
       activeIndexB: event.indexB,
+      currentEventType: event.type,
       sortedIndices: _getSortedIndicesAtStep(
         state.events,
         previousStep,
@@ -285,6 +289,7 @@ class SortController extends StateNotifier<SortState> {
       activeIndexA: -1,
       activeIndexB: -1,
       sortedIndices: [],
+      currentEventType: null,
     );
   }
 

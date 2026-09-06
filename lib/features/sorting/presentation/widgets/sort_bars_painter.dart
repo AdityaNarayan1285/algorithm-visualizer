@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/sort_event.dart';
+
 class SortBarsPainter extends CustomPainter {
   final List<int> array;
   final int activeIndexA;
   final int activeIndexB;
   final List<int> sortedIndices;
   final int maxValue;
+  final SortEventType? currentEventType;
 
   const SortBarsPainter({
     required this.array,
@@ -13,6 +16,7 @@ class SortBarsPainter extends CustomPainter {
     required this.activeIndexB,
     required this.sortedIndices,
     required this.maxValue,
+    this.currentEventType,
   });
 
   @override
@@ -35,7 +39,13 @@ class SortBarsPainter extends CustomPainter {
 
       // Active indices take priority over sorted indices.
       if (isActive) {
-        paint.color = Colors.red;
+        // Use amber for the insert position, red for everything else.
+        if (currentEventType == SortEventType.insert &&
+            i == activeIndexA) {
+          paint.color = Colors.amber;
+        } else {
+          paint.color = Colors.red;
+        }
       } else if (isSorted) {
         paint.color = Colors.green;
       } else {

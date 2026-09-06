@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../domain/sort_event.dart';
 import '../domain/sort_state.dart';
 import 'sort_providers.dart';
 import 'widgets/sort_bars_painter.dart';
@@ -45,6 +46,7 @@ class SortingPage extends ConsumerWidget {
                   activeIndexB: state.activeIndexB,
                   sortedIndices: state.sortedIndices,
                   maxValue: 100,
+                  currentEventType: state.currentEventType,
                 ),
                 size: Size.infinite,
               ),
@@ -115,7 +117,14 @@ class SortingPage extends ConsumerWidget {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: isActive
-                                    ? Colors.red
+                                    ? (state.currentEventType ==
+                                                SortEventType
+                                                    .insert &&
+                                            index ==
+                                                state
+                                                    .activeIndexA
+                                        ? Colors.amber
+                                        : Colors.red)
                                     : isSorted
                                         ? Colors.green
                                         : Theme.of(context)
@@ -123,7 +132,14 @@ class SortingPage extends ConsumerWidget {
                                             .surface,
                                 border: Border.all(
                                   color: isActive
-                                      ? Colors.red
+                                      ? (state.currentEventType ==
+                                                  SortEventType
+                                                      .insert &&
+                                              index ==
+                                                  state
+                                                      .activeIndexA
+                                          ? Colors.amber
+                                          : Colors.red)
                                       : isSorted
                                           ? Colors.green
                                           : Theme.of(context)

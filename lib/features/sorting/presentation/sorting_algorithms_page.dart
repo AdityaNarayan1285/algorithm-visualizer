@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/algorithms/bubble_sort.dart';
+import '../data/algorithms/insertion_sort.dart';
 import '../data/algorithms/selection_sort.dart';
 import 'sort_providers.dart';
 import 'sorting_page.dart';
@@ -56,6 +57,28 @@ class SortingAlgorithmsPage extends ConsumerWidget {
               ref
                   .read(sortControllerProvider.notifier)
                   .setAlgorithm(SelectionSort());
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SortingPage(),
+                ),
+              );
+            },
+          ),
+
+          _AlgorithmCard(
+            name: 'Insertion Sort',
+            description:
+                'Build sorted array one element at a time.',
+            bestTime: 'O(n)',
+            averageTime: 'O(n²)',
+            worstTime: 'O(n²)',
+            spaceComplexity: 'O(1)',
+            onTap: () {
+              ref
+                  .read(sortControllerProvider.notifier)
+                  .setAlgorithm(InsertionSort());
 
               Navigator.push(
                 context,

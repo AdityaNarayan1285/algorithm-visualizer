@@ -17,6 +17,7 @@ class SortState {
   final List<int> sortedIndices;
   final String algorithmName;
   final double speed;
+  final SortEventType? currentEventType;
 
   const SortState({
     required this.array,
@@ -28,6 +29,7 @@ class SortState {
     required this.sortedIndices,
     required this.algorithmName,
     required this.speed,
+    this.currentEventType,
   });
 
   factory SortState.initial() {
@@ -54,6 +56,7 @@ class SortState {
     List<int>? sortedIndices,
     String? algorithmName,
     double? speed,
+    SortEventType? currentEventType,
   }) {
     return SortState(
       array: array ?? this.array,
@@ -65,6 +68,7 @@ class SortState {
       sortedIndices: sortedIndices ?? this.sortedIndices,
       algorithmName: algorithmName ?? this.algorithmName,
       speed: speed ?? this.speed,
+      currentEventType: currentEventType ?? this.currentEventType,
     );
   }
 }
