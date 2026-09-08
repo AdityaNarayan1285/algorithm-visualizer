@@ -3,6 +3,8 @@ enum SortEventType {
   swap,
   shift,
   insert,
+  merge,
+  split,
   mark,
   unmark,
   done,
