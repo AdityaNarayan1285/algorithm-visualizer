@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/sort_event.dart';
 import '../domain/sort_state.dart';
 import 'sort_providers.dart';
+import 'widgets/merge_sort_tree_widget.dart';
 import 'widgets/sort_bars_painter.dart';
 
 class SortingPage extends ConsumerWidget {
@@ -13,12 +14,14 @@ class SortingPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(sortControllerProvider);
 
+    final isMergeSort = state.algorithmName == 'Merge Sort';
+
     // Generate the initial array when the page opens.
     if (state.array.isEmpty) {
       Future.microtask(() {
         ref
             .read(sortControllerProvider.notifier)
-            .generateArray(20);
+            .generateArray(isMergeSort ? 8 : 20);
       });
     }
 
@@ -33,23 +36,25 @@ class SortingPage extends ConsumerWidget {
       body: Column(
         children: [
           // --------------------------------------------------
-          // Sorting bars
+          // Visualization (Tree Flowchart for Merge Sort, Bars for others)
           // --------------------------------------------------
 
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: CustomPaint(
-                painter: SortBarsPainter(
-                  array: state.array,
-                  activeIndexA: state.activeIndexA,
-                  activeIndexB: state.activeIndexB,
-                  sortedIndices: state.sortedIndices,
-                  maxValue: 100,
-                  currentEventType: state.currentEventType,
-                ),
-                size: Size.infinite,
-              ),
+              child: isMergeSort
+                  ? MergeSortTreeWidget(state: state)
+                  : CustomPaint(
+                      painter: SortBarsPainter(
+                        array: state.array,
+                        activeIndexA: state.activeIndexA,
+                        activeIndexB: state.activeIndexB,
+                        sortedIndices: state.sortedIndices,
+                        maxValue: 100,
+                        currentEventType: state.currentEventType,
+                      ),
+                      size: Size.infinite,
+                    ),
             ),
           ),
 
@@ -90,6 +95,31 @@ class SortingPage extends ConsumerWidget {
                         final isSorted =
                             state.sortedIndices.contains(index);
 
+                        Color? cellColor;
+                        if (state.currentEventType == SortEventType.split &&
+                            state.activeIndexA != -1 &&
+                            state.activeIndexB != -1 &&
+                            index >= state.activeIndexA &&
+                            index <= state.activeIndexB) {
+                          final mid = state.activeIndexA +
+                              (state.activeIndexB - state.activeIndexA) ~/ 2;
+                          cellColor = index <= mid
+                              ? Colors.purpleAccent
+                              : Colors.cyan;
+                        } else if (state.currentEventType == SortEventType.merge &&
+                            index == state.activeIndexA) {
+                          cellColor = Colors.orangeAccent;
+                        } else if (isActive) {
+                          cellColor = state.currentEventType == SortEventType.insert &&
+                                  index == state.activeIndexA
+                              ? Colors.amber
+                              : Colors.red;
+                        } else if (isSorted) {
+                          cellColor = Colors.green;
+                        }
+
+                        final hasBackground = cellColor != null;
+
                         return Column(
                           children: [
                             // Index
@@ -116,35 +146,11 @@ class SortingPage extends ConsumerWidget {
                               height: 48,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: isActive
-                                    ? (state.currentEventType ==
-                                                SortEventType
-                                                    .insert &&
-                                            index ==
-                                                state
-                                                    .activeIndexA
-                                        ? Colors.amber
-                                        : Colors.red)
-                                    : isSorted
-                                        ? Colors.green
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .surface,
+                                color: cellColor ??
+                                    Theme.of(context).colorScheme.surface,
                                 border: Border.all(
-                                  color: isActive
-                                      ? (state.currentEventType ==
-                                                  SortEventType
-                                                      .insert &&
-                                              index ==
-                                                  state
-                                                      .activeIndexA
-                                          ? Colors.amber
-                                          : Colors.red)
-                                      : isSorted
-                                          ? Colors.green
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .outline,
+                                  color: cellColor ??
+                                      Theme.of(context).colorScheme.outline,
                                   width: 1.5,
                                 ),
                               ),
@@ -152,9 +158,7 @@ class SortingPage extends ConsumerWidget {
                                 '${state.array[index]}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: isActive || isSorted
-                                      ? Colors.white
-                                      : null,
+                                  color: hasBackground ? Colors.white : null,
                                 ),
                               ),
                             ),
@@ -254,7 +258,7 @@ class SortingPage extends ConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        controller.generateArray(20);
+                        controller.generateArray(isMergeSort ? 8 : 20);
                       },
                       child: const Text('New Array'),
                     ),

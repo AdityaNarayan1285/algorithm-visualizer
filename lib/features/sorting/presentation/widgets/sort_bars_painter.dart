@@ -37,20 +37,36 @@ class SortBarsPainter extends CustomPainter {
 
       final isSorted = sortedIndices.contains(i);
 
-      // Active indices take priority over sorted indices.
-      if (isActive) {
-        // Use amber for the insert position, red for everything else.
+      Color barColor;
+
+      if (currentEventType == SortEventType.split &&
+          activeIndexA != -1 &&
+          activeIndexB != -1 &&
+          i >= activeIndexA &&
+          i <= activeIndexB) {
+        final mid = activeIndexA + (activeIndexB - activeIndexA) ~/ 2;
+        if (i <= mid) {
+          barColor = Colors.purpleAccent;
+        } else {
+          barColor = Colors.cyan;
+        }
+      } else if (currentEventType == SortEventType.merge &&
+          i == activeIndexA) {
+        barColor = Colors.orangeAccent;
+      } else if (isActive) {
         if (currentEventType == SortEventType.insert &&
             i == activeIndexA) {
-          paint.color = Colors.amber;
+          barColor = Colors.amber;
         } else {
-          paint.color = Colors.red;
+          barColor = Colors.red;
         }
       } else if (isSorted) {
-        paint.color = Colors.green;
+        barColor = Colors.green;
       } else {
-        paint.color = Colors.blue;
+        barColor = Colors.blue;
       }
+
+      paint.color = barColor;
 
       final rect = Rect.fromLTWH(
         i * barWidth,

@@ -1,4 +1,4 @@
-```dart
+
 import '../../domain/sort_algo.dart';
 import '../../domain/sort_event.dart';
 
@@ -14,15 +14,15 @@ class MergeSort implements SortAlgorithm {
 
     void merge(int left, int middle, int right) {
       // Copy the current range into the temporary array.
-      for (int index = left; index <= right; index++) {
-        temp[index] = array[index];
+      for (int i = left; i <= right; i++) {
+        temp[i] = array[i];
       }
 
       int i = left;
       int j = middle + 1;
       int k = left;
 
-      // Merge while both halves still have elements.
+      // Merge the two sorted halves.
       while (i <= middle && j <= right) {
         events.add(
           SortEvent(
@@ -35,31 +35,20 @@ class MergeSort implements SortAlgorithm {
 
         if (temp[i] <= temp[j]) {
           array[k] = temp[i];
-
-          events.add(
-            SortEvent(
-              type: SortEventType.merge,
-              indexA: i,
-              indexB: k,
-              arraySnapshot: List<int>.from(array),
-            ),
-          );
-
           i++;
         } else {
           array[k] = temp[j];
-
-          events.add(
-            SortEvent(
-              type: SortEventType.merge,
-              indexA: j,
-              indexB: k,
-              arraySnapshot: List<int>.from(array),
-            ),
-          );
-
           j++;
         }
+
+        events.add(
+          SortEvent(
+            type: SortEventType.merge,
+            indexA: k,
+            indexB: -1,
+            arraySnapshot: List<int>.from(array),
+          ),
+        );
 
         k++;
       }
@@ -71,8 +60,8 @@ class MergeSort implements SortAlgorithm {
         events.add(
           SortEvent(
             type: SortEventType.merge,
-            indexA: i,
-            indexB: k,
+            indexA: k,
+            indexB: -1,
             arraySnapshot: List<int>.from(array),
           ),
         );
@@ -88,8 +77,8 @@ class MergeSort implements SortAlgorithm {
         events.add(
           SortEvent(
             type: SortEventType.merge,
-            indexA: j,
-            indexB: k,
+            indexA: k,
+            indexB: -1,
             arraySnapshot: List<int>.from(array),
           ),
         );
@@ -100,13 +89,14 @@ class MergeSort implements SortAlgorithm {
     }
 
     void mergeSort(int left, int right) {
+      // Base case: a single element is already sorted.
       if (left >= right) {
         return;
       }
 
-      final middle = (left + right) ~/ 2;
+      final middle = left + (right - left) ~/ 2;
 
-      // Record the range being split.
+      // Record that this range is being split.
       events.add(
         SortEvent(
           type: SortEventType.split,
@@ -116,28 +106,21 @@ class MergeSort implements SortAlgorithm {
         ),
       );
 
+      // Sort the left half.
       mergeSort(left, middle);
+
+      // Sort the right half.
       mergeSort(middle + 1, right);
 
+      // Merge the two sorted halves.
       merge(left, middle, right);
     }
 
-    if (array.length > 1) {
+    if (array.isNotEmpty) {
       mergeSort(0, array.length - 1);
     }
 
-    // Only mark elements after the entire array is sorted.
-    for (int index = 0; index < array.length; index++) {
-      events.add(
-        SortEvent(
-          type: SortEventType.mark,
-          indexA: index,
-          indexB: -1,
-          arraySnapshot: List<int>.from(array),
-        ),
-      );
-    }
-
+    // Record completion.
     events.add(
       SortEvent(
         type: SortEventType.done,
@@ -150,4 +133,3 @@ class MergeSort implements SortAlgorithm {
     return events;
   }
 }
-```
