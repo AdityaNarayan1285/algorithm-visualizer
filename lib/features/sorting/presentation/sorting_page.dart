@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/widgets/algorithm_status_banner.dart';
 import '../domain/sort_event.dart';
 import '../domain/sort_state.dart';
 import 'sort_providers.dart';
@@ -35,6 +36,11 @@ class SortingPage extends ConsumerWidget {
 
       body: Column(
         children: [
+          // --------------------------------------------------
+          // Status Text Banner (Displayed for all algorithms)
+          // --------------------------------------------------
+          AlgorithmStatusBanner(state: state),
+
           // --------------------------------------------------
           // Visualization (Tree Flowchart for Merge Sort, Bars for others)
           // --------------------------------------------------
@@ -233,21 +239,28 @@ class SortingPage extends ConsumerWidget {
                   // Speed
                   // --------------------------------------------------
 
-                  Row(
-                    children: [
-                      const Icon(Icons.speed),
+                  Builder(
+                    builder: (context) {
+                      final maxDelay = isMergeSort ? 2000.0 : 1000.0;
+                      final currentSpeed = state.speed.clamp(10.0, maxDelay);
 
-                      Expanded(
-                        child: Slider(
-                          min: 10,
-                          max: 500,
-                          value: 510 - state.speed.clamp(10, 500),
-                          onChanged: (value) {
-                            controller.setSpeed(510 - value);
-                          }
-                        ),
-                      ),
-                    ],
+                      return Row(
+                        children: [
+                          const Icon(Icons.speed),
+
+                          Expanded(
+                            child: Slider(
+                              min: 10.0,
+                              max: maxDelay,
+                              value: (maxDelay + 10.0) - currentSpeed,
+                              onChanged: (value) {
+                                controller.setSpeed((maxDelay + 10.0) - value);
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
 
                   // --------------------------------------------------

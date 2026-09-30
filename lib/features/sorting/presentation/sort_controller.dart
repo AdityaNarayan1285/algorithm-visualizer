@@ -45,6 +45,8 @@ class SortController extends StateNotifier<SortState> {
 
     _algorithm = algorithm;
 
+    final defaultSpeed = algorithm.name == 'Merge Sort' ? 1000.0 : 200.0;
+
     state = state.copyWith(
       algorithmName: algorithm.name,
       events: [],
@@ -54,6 +56,7 @@ class SortController extends StateNotifier<SortState> {
       activeIndexB: -1,
       sortedIndices: [],
       currentEventType: null,
+      speed: defaultSpeed,
     );
   }
 
