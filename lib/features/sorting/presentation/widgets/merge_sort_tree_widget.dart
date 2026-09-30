@@ -128,30 +128,13 @@ class MergeSortTreeWidget extends StatelessWidget {
 
     return AlgorithmTreeWidget(
       nodes: genericNodes,
-      statusTitle: _getStatusText(state),
-      statusIcon: Icons.account_tree_outlined,
+      statusTitle: null,
       customNodeBuilder: (context, genericNode) {
         // Find matching original node for granular cell coloring
         final origNode = treeNodes.firstWhere((n) => '${n.id}' == genericNode.id);
         return _buildMergeNodeCard(context, origNode, genericNode, activeRange);
       },
     );
-  }
-
-  String _getStatusText(SortState state) {
-    if (state.status == SortStatus.completed) {
-      return 'Merge Sort Completed! All sub-arrays merged.';
-    }
-    if (state.currentEventType == SortEventType.split) {
-      return 'Splitting array range [${state.activeIndexA}..${state.activeIndexB}] into 2 halves';
-    }
-    if (state.currentEventType == SortEventType.merge) {
-      return 'Merging sorted elements into index ${state.activeIndexA}';
-    }
-    if (state.currentEventType == SortEventType.comparison) {
-      return 'Comparing elements at index ${state.activeIndexA} and ${state.activeIndexB}';
-    }
-    return 'Recursion Tree Breakdown';
   }
 
   Map<String, dynamic> _getActiveRange(SortState state) {
