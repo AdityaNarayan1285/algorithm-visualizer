@@ -7,6 +7,7 @@ enum SortEventType {
   split,
   mark,
   unmark,
+  pivot,
   done,
 }
 

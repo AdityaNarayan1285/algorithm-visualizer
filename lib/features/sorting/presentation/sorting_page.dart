@@ -58,6 +58,7 @@ class SortingPage extends ConsumerWidget {
                         sortedIndices: state.sortedIndices,
                         maxValue: 100,
                         currentEventType: state.currentEventType,
+                        algorithmName: state.algorithmName,
                       ),
                       size: Size.infinite,
                     ),
@@ -115,11 +116,20 @@ class SortingPage extends ConsumerWidget {
                         } else if (state.currentEventType == SortEventType.merge &&
                             index == state.activeIndexA) {
                           cellColor = Colors.orangeAccent;
+                        } else if (state.currentEventType == SortEventType.pivot &&
+                            index == state.activeIndexA) {
+                          cellColor = Colors.deepPurpleAccent;
                         } else if (isActive) {
-                          cellColor = state.currentEventType == SortEventType.insert &&
-                                  index == state.activeIndexA
-                              ? Colors.amber
-                              : Colors.red;
+                          if (state.currentEventType == SortEventType.insert &&
+                                  index == state.activeIndexA) {
+                            cellColor = Colors.amber;
+                          } else if (state.algorithmName == 'Quick Sort' &&
+                              state.currentEventType == SortEventType.comparison &&
+                              index == state.activeIndexB) {
+                            cellColor = Colors.deepPurpleAccent;
+                          } else {
+                            cellColor = Colors.red;
+                          }
                         } else if (isSorted) {
                           cellColor = Colors.green;
                         }

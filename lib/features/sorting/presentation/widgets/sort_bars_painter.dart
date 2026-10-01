@@ -9,6 +9,7 @@ class SortBarsPainter extends CustomPainter {
   final List<int> sortedIndices;
   final int maxValue;
   final SortEventType? currentEventType;
+  final String? algorithmName;
 
   const SortBarsPainter({
     required this.array,
@@ -17,6 +18,7 @@ class SortBarsPainter extends CustomPainter {
     required this.sortedIndices,
     required this.maxValue,
     this.currentEventType,
+    this.algorithmName,
   });
 
   @override
@@ -53,10 +55,17 @@ class SortBarsPainter extends CustomPainter {
       } else if (currentEventType == SortEventType.merge &&
           i == activeIndexA) {
         barColor = Colors.orangeAccent;
+      } else if (currentEventType == SortEventType.pivot &&
+          i == activeIndexA) {
+        barColor = Colors.deepPurpleAccent;
       } else if (isActive) {
         if (currentEventType == SortEventType.insert &&
             i == activeIndexA) {
           barColor = Colors.amber;
+        } else if (algorithmName == 'Quick Sort' &&
+            currentEventType == SortEventType.comparison &&
+            i == activeIndexB) {
+          barColor = Colors.deepPurpleAccent;
         } else {
           barColor = Colors.red;
         }

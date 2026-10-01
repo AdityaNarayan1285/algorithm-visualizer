@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/algorithms/bubble_sort.dart';
 import '../data/algorithms/insertion_sort.dart';
 import '../data/algorithms/merge_sort.dart';
+import '../data/algorithms/quick_sort.dart';
 import '../data/algorithms/selection_sort.dart';
 import 'sort_providers.dart';
 import 'sorting_page.dart';
@@ -102,6 +103,28 @@ class SortingAlgorithmsPage extends ConsumerWidget {
               ref
                   .read(sortControllerProvider.notifier)
                   .setAlgorithm(MergeSort());
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SortingPage(),
+                ),
+              );
+            },
+          ),
+
+          _AlgorithmCard(
+            name: 'Quick Sort',
+            description:
+                'Divide and conquer using pivot partitioning.',
+            bestTime: 'O(n log n)',
+            averageTime: 'O(n log n)',
+            worstTime: 'O(n²)',
+            spaceComplexity: 'O(log n)',
+            onTap: () {
+              ref
+                  .read(sortControllerProvider.notifier)
+                  .setAlgorithm(QuickSort());
 
               Navigator.push(
                 context,

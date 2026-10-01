@@ -25,7 +25,12 @@ class AlgorithmStatusBanner extends StatelessWidget {
     final a = state.activeIndexA;
     final b = state.activeIndexB;
 
-    if (eventType == SortEventType.comparison && a >= 0 && a < state.array.length && b >= 0 && b < state.array.length) {
+    if (eventType == SortEventType.pivot && a >= 0 && a < state.array.length) {
+      return 'Selected index $a (${state.array[a]}) as pivot element';
+    } else if (eventType == SortEventType.comparison && a >= 0 && a < state.array.length && b >= 0 && b < state.array.length) {
+      if (state.algorithmName == 'Quick Sort') {
+        return 'Comparing index $a (${state.array[a]}) with pivot at index $b (${state.array[b]})';
+      }
       return 'Comparing index $a (${state.array[a]}) and index $b (${state.array[b]})';
     } else if (eventType == SortEventType.swap && a >= 0 && b >= 0) {
       return 'Swapping elements at index $a and index $b';
