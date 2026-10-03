@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/algorithms/bubble_sort.dart';
+import '../data/algorithms/heap_sort.dart';
 import '../data/algorithms/insertion_sort.dart';
 import '../data/algorithms/merge_sort.dart';
 import '../data/algorithms/quick_sort.dart';
@@ -125,6 +126,28 @@ class SortingAlgorithmsPage extends ConsumerWidget {
               ref
                   .read(sortControllerProvider.notifier)
                   .setAlgorithm(QuickSort());
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SortingPage(),
+                ),
+              );
+            },
+          ),
+
+          _AlgorithmCard(
+            name: 'Heap Sort',
+            description:
+                'Build max heap and repeatedly extract the max element.',
+            bestTime: 'O(n log n)',
+            averageTime: 'O(n log n)',
+            worstTime: 'O(n log n)',
+            spaceComplexity: 'O(1)',
+            onTap: () {
+              ref
+                  .read(sortControllerProvider.notifier)
+                  .setAlgorithm(HeapSort());
 
               Navigator.push(
                 context,

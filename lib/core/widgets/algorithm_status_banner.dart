@@ -30,9 +30,14 @@ class AlgorithmStatusBanner extends StatelessWidget {
     } else if (eventType == SortEventType.comparison && a >= 0 && a < state.array.length && b >= 0 && b < state.array.length) {
       if (state.algorithmName == 'Quick Sort') {
         return 'Comparing index $a (${state.array[a]}) with pivot at index $b (${state.array[b]})';
+      } else if (state.algorithmName == 'Heap Sort') {
+        return 'Comparing node #$a (${state.array[a]}) and node #$b (${state.array[b]})';
       }
       return 'Comparing index $a (${state.array[a]}) and index $b (${state.array[b]})';
     } else if (eventType == SortEventType.swap && a >= 0 && b >= 0) {
+      if (state.algorithmName == 'Heap Sort') {
+        return 'Swapping node #$a and node #$b in the heap';
+      }
       return 'Swapping elements at index $a and index $b';
     } else if (eventType == SortEventType.shift && a >= 0 && b >= 0) {
       return 'Shifting element at index $a to index $b';
@@ -43,6 +48,9 @@ class AlgorithmStatusBanner extends StatelessWidget {
     } else if (eventType == SortEventType.merge && a >= 0) {
       return 'Merging element into index $a';
     } else if (eventType == SortEventType.mark && a >= 0) {
+      if (state.algorithmName == 'Heap Sort') {
+        return 'Node #$a is finalized in its sorted position';
+      }
       return 'Position index $a is finalized in its sorted position';
     }
 

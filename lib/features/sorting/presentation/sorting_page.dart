@@ -5,6 +5,7 @@ import '../../../core/widgets/algorithm_status_banner.dart';
 import '../domain/sort_event.dart';
 import '../domain/sort_state.dart';
 import 'sort_providers.dart';
+import 'widgets/heap_sort_tree_widget.dart';
 import 'widgets/merge_sort_tree_widget.dart';
 import 'widgets/sort_bars_painter.dart';
 
@@ -16,13 +17,17 @@ class SortingPage extends ConsumerWidget {
     final state = ref.watch(sortControllerProvider);
 
     final isMergeSort = state.algorithmName == 'Merge Sort';
+    final isHeapSort = state.algorithmName == 'Heap Sort';
+    final isTreeAlgorithm = isMergeSort || isHeapSort;
+
+    final defaultArraySize = isHeapSort ? 15 : (isMergeSort ? 8 : 20);
 
     // Generate the initial array when the page opens.
     if (state.array.isEmpty) {
       Future.microtask(() {
         ref
             .read(sortControllerProvider.notifier)
-            .generateArray(isMergeSort ? 8 : 20);
+            .generateArray(defaultArraySize);
       });
     }
 
@@ -42,7 +47,7 @@ class SortingPage extends ConsumerWidget {
           AlgorithmStatusBanner(state: state),
 
           // --------------------------------------------------
-          // Visualization (Tree Flowchart for Merge Sort, Bars for others)
+          // Visualization (Tree Flowchart for Merge/Heap Sort, Bars for others)
           // --------------------------------------------------
 
           Expanded(
@@ -50,18 +55,20 @@ class SortingPage extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               child: isMergeSort
                   ? MergeSortTreeWidget(state: state)
-                  : CustomPaint(
-                      painter: SortBarsPainter(
-                        array: state.array,
-                        activeIndexA: state.activeIndexA,
-                        activeIndexB: state.activeIndexB,
-                        sortedIndices: state.sortedIndices,
-                        maxValue: 100,
-                        currentEventType: state.currentEventType,
-                        algorithmName: state.algorithmName,
-                      ),
-                      size: Size.infinite,
-                    ),
+                  : isHeapSort
+                      ? HeapSortTreeWidget(state: state)
+                      : CustomPaint(
+                          painter: SortBarsPainter(
+                            array: state.array,
+                            activeIndexA: state.activeIndexA,
+                            activeIndexB: state.activeIndexB,
+                            sortedIndices: state.sortedIndices,
+                            maxValue: 100,
+                            currentEventType: state.currentEventType,
+                            algorithmName: state.algorithmName,
+                          ),
+                          size: Size.infinite,
+                        ),
             ),
           ),
 
@@ -251,7 +258,7 @@ class SortingPage extends ConsumerWidget {
 
                   Builder(
                     builder: (context) {
-                      final maxDelay = isMergeSort ? 2000.0 : 1000.0;
+                      final maxDelay = isTreeAlgorithm ? 2000.0 : 1000.0;
                       final currentSpeed = state.speed.clamp(10.0, maxDelay);
 
                       return Row(
@@ -281,7 +288,7 @@ class SortingPage extends ConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        controller.generateArray(isMergeSort ? 8 : 20);
+                        controller.generateArray(defaultArraySize);
                       },
                       child: const Text('New Array'),
                     ),
