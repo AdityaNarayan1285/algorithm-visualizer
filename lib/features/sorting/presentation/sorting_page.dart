@@ -5,6 +5,7 @@ import '../../../core/widgets/algorithm_status_banner.dart';
 import '../domain/sort_event.dart';
 import '../domain/sort_state.dart';
 import 'sort_providers.dart';
+import 'widgets/bucket_sort_widget.dart';
 import 'widgets/heap_sort_tree_widget.dart';
 import 'widgets/merge_sort_tree_widget.dart';
 import 'widgets/sort_bars_painter.dart';
@@ -18,9 +19,10 @@ class SortingPage extends ConsumerWidget {
 
     final isMergeSort = state.algorithmName == 'Merge Sort';
     final isHeapSort = state.algorithmName == 'Heap Sort';
-    final isTreeAlgorithm = isMergeSort || isHeapSort;
+    final isBucketSort = state.algorithmName == 'Bucket Sort';
+    final isCustomView = isMergeSort || isHeapSort || isBucketSort;
 
-    final defaultArraySize = isHeapSort ? 15 : (isMergeSort ? 8 : 20);
+    final defaultArraySize = (isHeapSort || isBucketSort) ? 15 : (isMergeSort ? 8 : 20);
 
     // Generate the initial array when the page opens.
     if (state.array.isEmpty) {
@@ -47,7 +49,7 @@ class SortingPage extends ConsumerWidget {
           AlgorithmStatusBanner(state: state),
 
           // --------------------------------------------------
-          // Visualization (Tree Flowchart for Merge/Heap Sort, Bars for others)
+          // Visualization (Tree for Merge/Heap, Buckets for Bucket Sort, Bars for others)
           // --------------------------------------------------
 
           Expanded(
@@ -57,18 +59,20 @@ class SortingPage extends ConsumerWidget {
                   ? MergeSortTreeWidget(state: state)
                   : isHeapSort
                       ? HeapSortTreeWidget(state: state)
-                      : CustomPaint(
-                          painter: SortBarsPainter(
-                            array: state.array,
-                            activeIndexA: state.activeIndexA,
-                            activeIndexB: state.activeIndexB,
-                            sortedIndices: state.sortedIndices,
-                            maxValue: 100,
-                            currentEventType: state.currentEventType,
-                            algorithmName: state.algorithmName,
-                          ),
-                          size: Size.infinite,
-                        ),
+                      : isBucketSort
+                          ? BucketSortWidget(state: state)
+                          : CustomPaint(
+                              painter: SortBarsPainter(
+                                array: state.array,
+                                activeIndexA: state.activeIndexA,
+                                activeIndexB: state.activeIndexB,
+                                sortedIndices: state.sortedIndices,
+                                maxValue: 100,
+                                currentEventType: state.currentEventType,
+                                algorithmName: state.algorithmName,
+                              ),
+                              size: Size.infinite,
+                            ),
             ),
           ),
 
@@ -126,6 +130,12 @@ class SortingPage extends ConsumerWidget {
                         } else if (state.currentEventType == SortEventType.pivot &&
                             index == state.activeIndexA) {
                           cellColor = Colors.deepPurpleAccent;
+                        } else if (state.currentEventType == SortEventType.distribute &&
+                            index == state.activeIndexA) {
+                          cellColor = Colors.tealAccent.shade700;
+                        } else if (state.currentEventType == SortEventType.gather &&
+                            index == state.activeIndexA) {
+                          cellColor = Colors.orangeAccent;
                         } else if (isActive) {
                           if (state.currentEventType == SortEventType.insert &&
                                   index == state.activeIndexA) {
@@ -258,7 +268,7 @@ class SortingPage extends ConsumerWidget {
 
                   Builder(
                     builder: (context) {
-                      final maxDelay = isTreeAlgorithm ? 2000.0 : 1000.0;
+                      final maxDelay = isCustomView ? 2000.0 : 1000.0;
                       final currentSpeed = state.speed.clamp(10.0, maxDelay);
 
                       return Row(

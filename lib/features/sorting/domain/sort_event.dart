@@ -8,6 +8,8 @@ enum SortEventType {
   mark,
   unmark,
   pivot,
+  distribute,
+  gather,
   done,
 }
 

@@ -45,9 +45,10 @@ class SortController extends StateNotifier<SortState> {
 
     _algorithm = algorithm;
 
-    final isTreeAlgo =
-        algorithm.name == 'Merge Sort' || algorithm.name == 'Heap Sort';
-    final defaultSpeed = isTreeAlgo ? 1000.0 : 200.0;
+    final isCustomViewAlgo = algorithm.name == 'Merge Sort' ||
+        algorithm.name == 'Heap Sort' ||
+        algorithm.name == 'Bucket Sort';
+    final defaultSpeed = isCustomViewAlgo ? 1000.0 : 200.0;
 
     state = state.copyWith(
       algorithmName: algorithm.name,

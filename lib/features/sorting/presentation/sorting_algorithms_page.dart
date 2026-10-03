@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/algorithms/bubble_sort.dart';
+import '../data/algorithms/bucket_sort.dart';
 import '../data/algorithms/heap_sort.dart';
 import '../data/algorithms/insertion_sort.dart';
 import '../data/algorithms/merge_sort.dart';
@@ -148,6 +149,28 @@ class SortingAlgorithmsPage extends ConsumerWidget {
               ref
                   .read(sortControllerProvider.notifier)
                   .setAlgorithm(HeapSort());
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SortingPage(),
+                ),
+              );
+            },
+          ),
+
+          _AlgorithmCard(
+            name: 'Bucket Sort',
+            description:
+                'Distribute elements into buckets, sort each bucket, and concatenate.',
+            bestTime: 'O(n + k)',
+            averageTime: 'O(n + k)',
+            worstTime: 'O(n²)',
+            spaceComplexity: 'O(n + k)',
+            onTap: () {
+              ref
+                  .read(sortControllerProvider.notifier)
+                  .setAlgorithm(BucketSort());
 
               Navigator.push(
                 context,

@@ -27,13 +27,21 @@ class AlgorithmStatusBanner extends StatelessWidget {
 
     if (eventType == SortEventType.pivot && a >= 0 && a < state.array.length) {
       return 'Selected index $a (${state.array[a]}) as pivot element';
-    } else if (eventType == SortEventType.comparison && a >= 0 && a < state.array.length && b >= 0 && b < state.array.length) {
-      if (state.algorithmName == 'Quick Sort') {
+    } else if (eventType == SortEventType.distribute && a >= 0 && a < state.array.length && b >= 0) {
+      return 'Distributing element ${state.array[a]} (index $a) into Bucket $b';
+    } else if (eventType == SortEventType.gather && a >= 0 && a < state.array.length && b >= 0) {
+      return 'Gathering element ${state.array[a]} from Bucket $b into index $a';
+    } else if (eventType == SortEventType.comparison && a >= 0 && b >= 0) {
+      if (state.algorithmName == 'Quick Sort' && a < state.array.length && b < state.array.length) {
         return 'Comparing index $a (${state.array[a]}) with pivot at index $b (${state.array[b]})';
-      } else if (state.algorithmName == 'Heap Sort') {
+      } else if (state.algorithmName == 'Heap Sort' && a < state.array.length && b < state.array.length) {
         return 'Comparing node #$a (${state.array[a]}) and node #$b (${state.array[b]})';
+      } else if (state.algorithmName == 'Bucket Sort') {
+        return 'Sorting elements inside Bucket $a';
       }
-      return 'Comparing index $a (${state.array[a]}) and index $b (${state.array[b]})';
+      if (a < state.array.length && b < state.array.length) {
+        return 'Comparing index $a (${state.array[a]}) and index $b (${state.array[b]})';
+      }
     } else if (eventType == SortEventType.swap && a >= 0 && b >= 0) {
       if (state.algorithmName == 'Heap Sort') {
         return 'Swapping node #$a and node #$b in the heap';
